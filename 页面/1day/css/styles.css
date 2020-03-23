@@ -1,0 +1,14 @@
+.container {
+  position: relative;
+}
+
+.preview {
+  display: none;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+  background-image: url('https://unsplash.it/1200/900?image=1050');
+  background-repeat: no-repeat;
+}
