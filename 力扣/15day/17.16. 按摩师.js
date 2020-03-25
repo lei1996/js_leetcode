@@ -31,6 +31,12 @@ var massage = function (nums) {
 
     for (let i = 0; i < nums.length; i++) {
         [dp0, dp1] = [Math.max(dp0, dp1), dp0 + nums[i]];
+        // 0 1 
+        // 1 1 
+        // 1 3
+        // 3 4
+        // 4 4
+        console.log(dp0, dp1);
     }
     return Math.max(dp0, dp1);
 };
