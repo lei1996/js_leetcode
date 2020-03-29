@@ -47,8 +47,9 @@
 // 1 <= stationName.length <= 10
 // 与标准答案误差在 10^-5 以内的结果都视为正确结果。
 
-var UndergroundSystem = function() {
-  this.station = [];
+var UndergroundSystem = function () {
+  this.in = new Map();
+  this.check = new Map();
 };
 
 /**
@@ -57,15 +58,8 @@ var UndergroundSystem = function() {
  * @param {number} t
  * @return {void}
  */
-UndergroundSystem.prototype.checkIn = function(id, stationName, t) {
-  const index = this.station.findIndex(s => s.id === id);
-  // console.log(index);
-  if (index === -1)
-    this.station.push({
-      id,
-      stationName,
-      t
-    });
+UndergroundSystem.prototype.checkIn = function (id, stationName, t) {
+  this.in.set(id, [stationName, t]);
 };
 
 /**
@@ -74,15 +68,16 @@ UndergroundSystem.prototype.checkIn = function(id, stationName, t) {
  * @param {number} t
  * @return {void}
  */
-UndergroundSystem.prototype.checkOut = function(id, stationName, t) {
-  const index = this.station.findIndex(s => s.id === id);
-  // console.log(index);
-  if (index !== -1)
-    this.station.push({
-      id,
-      endStation: stationName,
-      t
-    });
+UndergroundSystem.prototype.checkOut = function (id, stationName, t) {
+  const [a, b] = this.in.get(id);
+  console.log(a);
+  const key = a + ':' + stationName;
+  const check = this.check.get(key);
+  if (check) {
+    this.check.set(key, [t - b + check[0], 1 + check[1]]);
+  } else {
+    this.check.set(key, [t - b, 1]);
+  }
 };
 
 /**
@@ -90,16 +85,17 @@ UndergroundSystem.prototype.checkOut = function(id, stationName, t) {
  * @param {string} endStation
  * @return {number}
  */
-UndergroundSystem.prototype.getAverageTime = function(
+UndergroundSystem.prototype.getAverageTime = function (
   startStation,
   endStation
 ) {
-  // console.log(this.station);
-  // console.log(endStation);
-  const startSn = this.station.filter(s => s.stationName === startStation);
-  const endSn = this.station.filter(s => s.endStation === endStation);
-  console.log(startSn);
-  console.log(endSn);
+  const key = startStation + ':' + endStation;
+  const check = this.check.get(key);
+  if (!check) {
+    return 0;
+  } else {
+    return check[0] / check[1];
+  }
 
 };
 
@@ -112,15 +108,15 @@ UndergroundSystem.prototype.getAverageTime = function(
  */
 
 var undergroundSystem = new UndergroundSystem();
-undergroundSystem.checkIn(45, "Leyton", 3);
-undergroundSystem.checkIn(32, "Paradise", 8);
-undergroundSystem.checkIn(27, "Leyton", 10);
-undergroundSystem.checkOut(45, "Waterloo", 15);
-undergroundSystem.checkOut(27, "Waterloo", 20);
-undergroundSystem.checkOut(32, "Cambridge", 22);
-undergroundSystem.getAverageTime("Paradise", "Cambridge"); // 返回 14.0。从 "Paradise"（时刻 8）到 "Cambridge"(时刻 22)的行程只有一趟
-undergroundSystem.getAverageTime("Leyton", "Waterloo"); // 返回 11.0。总共有 2 躺从 "Leyton" 到 "Waterloo" 的行程，编号为 id=45 的乘客出发于 time=3 到达于 time=15，编号为 id=27 的乘客于 time=10 出发于 time=20 到达。所以平均时间为 ( (15-3) + (20-10) ) / 2 = 11.0
-undergroundSystem.checkIn(10, "Leyton", 24);
-undergroundSystem.getAverageTime("Leyton", "Waterloo"); // 返回 11.0
-undergroundSystem.checkOut(10, "Waterloo", 38);
-undergroundSystem.getAverageTime("Leyton", "Waterloo");
+console.log(undergroundSystem.checkIn(45, "Leyton", 3));
+console.log(undergroundSystem.checkIn(32, "Paradise", 8));
+console.log(undergroundSystem.checkIn(27, "Leyton", 10));
+console.log(undergroundSystem.checkOut(45, "Waterloo", 15));
+console.log(undergroundSystem.checkOut(27, "Waterloo", 20));
+console.log(undergroundSystem.checkOut(32, "Cambridge", 22));
+console.log(undergroundSystem.getAverageTime("Paradise", "Cambridge")); // 返回 14.0。从 "Paradise"（时刻 8）到 "Cambridge"(时刻 22)的行程只有一趟
+console.log(undergroundSystem.getAverageTime("Leyton", "Waterloo")); // 返回 11.0。总共有 2 躺从 "Leyton" 到 "Waterloo" 的行程，编号为 id=45 的乘客出发于 time=3 到达于 time=15，编号为 id=27 的乘客于 time=10 出发于 time=20 到达。所以平均时间为 ( (15-3) + (20-10) ) / 2 = 11.0
+console.log(undergroundSystem.checkIn(10, "Leyton", 24));
+console.log(undergroundSystem.getAverageTime("Leyton", "Waterloo")); // 返回 11.0
+console.log(undergroundSystem.checkOut(10, "Waterloo", 38));
+console.log(undergroundSystem.getAverageTime("Leyton", "Waterloo"));
