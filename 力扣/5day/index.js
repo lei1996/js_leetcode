@@ -41,17 +41,18 @@
 //   console.log(map);
 //   return Math.max(...map.values());
 // };
-var lengthOfLIS = function(nums) {
+var lengthOfLIS = function (nums) {
   if (nums.length <= 1) return nums.length;
 
   const dp = [1];
   let result = 0;
 
-  for (let i = 0; i < nums.length; i++) {
+  for (let i = 1; i < nums.length; i++) {
     dp[i] = 1;
     for (let j = 0; j < i; j++) {
       // j 始终比 i 小
       if (nums[j] < nums[i]) {
+        // dp[j] 存储的是历史的上升子序长度. 
         dp[i] = Math.max(dp[i], dp[j] + 1);
       }
     }
@@ -61,7 +62,7 @@ var lengthOfLIS = function(nums) {
 };
 
 // console.log(lengthOfLIS([11, 12, 13, 14, 15, 6, 7, 8, 101, 18]));
-console.log(lengthOfLIS([10,9,2,5,3,7,101,18]));
+console.log(lengthOfLIS([10, 9, 2, 5, 3, 1, 7, 101, 18]));
 
 // var lengthOfLIS = function(nums) {
 //   if (!nums.length) return 0;

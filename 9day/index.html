@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script>
+    window.onload = () => {
+      var element = document.getElementById('t');
+
+      function step(timestamp) {
+        console.log(timestamp)
+        var progress = timestamp;
+        // element.style.left = (progress / 30) * (10 - progress / 1000) + 'px';
+        element.style.left = Math.pow(progress / 5, .5) * 40 + 'px';
+        if (progress < 5000) {
+          window.requestAnimationFrame(step);
+        } else {
+          window.cancelAnimationFrame(step)
+        }
+      }
+
+      window.requestAnimationFrame(step);
+    }
+  </script>
+  <style>
+    .container {
+      position: relative;
+      width: 1000px;
+    }
+
+    #t {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="t"></div>
+  </div>
+</body>
+
+</html>
