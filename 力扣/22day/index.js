@@ -2,15 +2,10 @@
 
 var nm = function (n) {
     if (n < 4) return -1;
-    const arr = [];
     for (let i = 0; i < n; i++) {
-        arr.push(i);
-    }
-    console.log(arr);
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr.length; j++) {
-            for (let k = 0; k < arr.length; k++) {
-                for (let m = 0; m < arr.length; m++) {
+        for (let j = 0; j < n; j++) {
+            for (let k = 0; k < n; k++) {
+                for (let m = 0; m < n; m++) {
                     if (i === j || j === k || k === m || i === k || i === m || j === m) continue;
                     console.log(i, j, k, m);
                 }
@@ -19,4 +14,4 @@ var nm = function (n) {
     }
 }
 
-console.log(nm(200));
+console.log(nm(4));
