@@ -24,17 +24,14 @@
  * @param {number} n
  * @param {number} m
  * @return {number}
+ * 完全不懂为啥是这样，纯数学题。
  */
-var lastRemaining = function(n, m) {
-  const arr = [];
-  for (let i = 0; i < n; i++) arr.push(i);
-  while (arr.length !== 1) {
-      
+var lastRemaining = function (n, m) {
+  let ans = 0;
+  for (let i = 2; i <= n; i++) {
+    ans = (ans + m) % i;
   }
-//   for (let i = 1; i < n; i++) {
-//     console.log(arr[i * m - 1]);
-//     // arr.splice
-//   }
+  return ans;
 };
 
 console.log(lastRemaining((n = 5), (m = 3)));
