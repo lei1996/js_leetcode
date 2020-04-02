@@ -39,23 +39,15 @@ var gameOfLife = function (board) {
   // 这里不能用 new Array().fill() 初始化数组，因为是浅拷贝 数组的值是引用类型
   // 需要用循环 成 深拷贝
   const arr = board.map(b => [...b]);
-  // for (let i = 0; i < board.length; i++) {
-  //   const tmp = [];
-  //   for (let j = 0; j < board[i].length; j++)
-  //     tmp.push(0);
-  //   arr.push(tmp);
-  // }
+  const dir = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
   for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr[i].length; j++) {
       let count = 0;
-      for (let n = (i > 0 ? -1 : 0); n <= (i < arr.length - 1 ? 1 : 0); n++) {
-        for (let m = (j > 0 ? -1 : 0); m <= (j < arr[i].length - 1 ? 1 : 0); m++) {
-          if (n === 0 && m === 0) continue;
-          if (arr[i + n][j + m] === 1) {
-            count++;
-          }
-        }
+      for (const d of dir) {
+        const [x, y] = d;
+        if (arr[i + x] && arr[i + x][j + y] === 1)
+          count++;
       }
       if ((arr[i][j] === 1) && (count < 2 || count > 3)) {
         board[i][j] = 0;
@@ -63,15 +55,48 @@ var gameOfLife = function (board) {
       if ((arr[i][j] === 0) && count === 3) {
         board[i][j] = 1;
       }
-
-      count = 0;
     }
-
   }
   return board;
 };
 
-console.log(gameOfLife([
+/* 
+* javascript
+* by 碎碎酱
+* 执行用时: 60ms, 内存消耗: 34.1 MB
+*/
+var gameOfLife1 = function (board) {
+  const d = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      let alive = 0;
+      for (const t of d) {
+        if (board[i + t[0]] && (board[i + t[0]][j + t[1]] & 1) === 1) {
+          alive++;
+        }
+      }
+      if (board[i][j] === 0) {
+        if (alive === 3) {
+          board[i][j] = 2;
+        }
+      } else {
+        if (alive < 2 || alive > 3) {
+          board[i][j] = 3;
+        }
+      }
+    }
+  }
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j] > 1) {
+        board[i][j] = 3 - board[i][j];
+      }
+    }
+  }
+  return board;
+};
+
+console.log(gameOfLife1([
   [0, 1, 0],
   [0, 0, 1],
   [1, 1, 1],
