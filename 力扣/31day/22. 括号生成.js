@@ -38,4 +38,31 @@ var generateParenthesis = function (n) {
   return ans;
 };
 
-console.log(generateParenthesis((n = 3)));
+/**
+ * @param {number} n
+ * @return {string[]}
+ * 回朔法
+ */
+var generateParenthesis1 = function (n) {
+  const ans = [];
+  const backtrack = (ans, cur = "", open, close, max) => {
+    if (cur.length === max * 2) {
+      ans.push(cur);
+      return;
+    }
+    if (open < max) {
+      cur += "(";
+      backtrack(ans, cur, open + 1, close, max);
+      cur.substring(0, cur.length - 1);
+    }
+    if (close < open) {
+      cur += ")";
+      backtrack(ans, cur, open, close + 1, max);
+      cur.substring(0, cur.length - 1);
+    }
+  };
+  backtrack(ans, "", 0, 0, n);
+  return ans;
+};
+
+console.log(generateParenthesis1((n = 3)));
