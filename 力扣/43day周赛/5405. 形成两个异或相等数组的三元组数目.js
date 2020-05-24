@@ -36,14 +36,26 @@
 // 提示：
 
 // 1 <= arr.length <= 300
-// 1 <= arr[i] <= 10^8
+// 1 <= arr[i] <=r 10^8
 
 /**
  * @param {number[]} arr
  * @return {number}
  */
-var countTriplets = function(arr) {
-    
+var countTriplets = function (arr) {
+  if (!arr.length || arr.length == 0) return 0;
+  let ans = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    let sum = 0;
+    for (let k = i + 1; k < arr.length; k++) {
+      for (let j = i; j <= k; j++) {
+        sum ^= arr[j];
+      }
+      if (sum == 0) ans += k - i;
+      sum = 0;
+    }
+  }
+  return ans;
 };
 
-console.log(countTriplets(arr = [2,3,1,6,7]));
+console.log(countTriplets((arr = [2, 3, 1, 6, 7])));
